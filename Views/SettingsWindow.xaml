@@ -1,0 +1,203 @@
+<Window x:Class="CANalyzer.WPF.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Settings" Height="400" Width="600"
+        WindowStartupLocation="CenterOwner">
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" Text="CANalyzer Settings" 
+                  FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+        
+        <TabControl Grid.Row="1">
+            <TabItem Header="General">
+                <ScrollViewer>
+                    <StackPanel Margin="10">
+                        <GroupBox Header="Log Parsing" Margin="0,0,0,10">
+                            <StackPanel>
+                                <CheckBox x:Name="chkAutoDetectFormat" Content="Auto-detect log format" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkShowWarnings" Content="Show parsing warnings" 
+                                          IsChecked="True" Margin="5"/>
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Default DLC:" VerticalAlignment="Center" Width="100"/>
+                                    <TextBox x:Name="txtDefaultDLC" Text="8" Width="50"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Signal Detection">
+                            <StackPanel>
+                                <CheckBox x:Name="chkMultiByteDetection" Content="Enable multi-byte signal detection" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkAutoScaling" Content="Auto-detect signal scaling" 
+                                          IsChecked="True" Margin="5"/>
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Minimum signal length:" VerticalAlignment="Center" Width="150"/>
+                                    <TextBox x:Name="txtMinSignalLength" Text="1" Width="50"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Maximum signal length:" VerticalAlignment="Center" Width="150"/>
+                                    <TextBox x:Name="txtMaxSignalLength" Text="32" Width="50"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem Header="Analysis">
+                <ScrollViewer>
+                    <StackPanel Margin="10">
+                        <GroupBox Header="Statistical Analysis" Margin="0,0,0,10">
+                            <StackPanel>
+                                <CheckBox x:Name="chkCalculateFrequency" Content="Calculate message frequency" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkCalculateJitter" Content="Calculate jitter" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkDetectCyclic" Content="Detect cyclic messages" 
+                                          IsChecked="True" Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                        
+                        <GroupBox Header="ML Classification" Margin="0,0,0,10">
+                            <StackPanel>
+                                <CheckBox x:Name="chkEnableML" Content="Enable signal classification" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkUsePretrained" Content="Use pre-trained models" 
+                                          IsChecked="True" Margin="5"/>
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Classification threshold:" VerticalAlignment="Center" Width="150"/>
+                                    <Slider x:Name="sldClassificationThreshold" Minimum="0.5" Maximum="1.0" 
+                                            Value="0.7" Width="150" TickFrequency="0.1"/>
+                                    <TextBlock x:Name="txtThresholdValue" Text="0.7" Width="30" 
+                                               Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Correlation Analysis">
+                            <StackPanel>
+                                <CheckBox x:Name="chkEnableCorrelation" Content="Enable correlation analysis" 
+                                          IsChecked="True" Margin="5"/>
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Correlation threshold:" VerticalAlignment="Center" Width="150"/>
+                                    <Slider x:Name="sldCorrelationThreshold" Minimum="0.3" Maximum="0.9" 
+                                            Value="0.7" Width="150" TickFrequency="0.1"/>
+                                    <TextBlock x:Name="txtCorrelationValue" Text="0.7" Width="30" 
+                                               Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <CheckBox x:Name="chkCrossCorrelation" Content="Calculate cross-correlation lags" 
+                                          IsChecked="True" Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem Header="Display">
+                <ScrollViewer>
+                    <StackPanel Margin="10">
+                        <GroupBox Header="Interface" Margin="0,0,0,10">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="Theme:" VerticalAlignment="Center" Width="100"/>
+                                    <ComboBox x:Name="cmbTheme" SelectedIndex="0" Width="120">
+                                        <ComboBoxItem>Light</ComboBoxItem>
+                                        <ComboBoxItem>Dark</ComboBoxItem>
+                                        <ComboBoxItem>Blue</ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Update interval (ms):" VerticalAlignment="Center" Width="150"/>
+                                    <TextBox x:Name="txtUpdateInterval" Text="1000" Width="80"/>
+                                </StackPanel>
+                                
+                                <CheckBox x:Name="chkAutoRefresh" Content="Auto-refresh data" 
+                                          IsChecked="True" Margin="5,10,5,5"/>
+                                <CheckBox x:Name="chkShowTooltips" Content="Show tooltips" 
+                                          IsChecked="True" Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Plot Settings">
+                            <StackPanel>
+                                <CheckBox x:Name="chkShowGrid" Content="Show grid lines" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkShowLegend" Content="Show legend" 
+                                          IsChecked="True" Margin="5"/>
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Plot points limit:" VerticalAlignment="Center" Width="100"/>
+                                    <TextBox x:Name="txtPlotPointsLimit" Text="1000" Width="80"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem Header="ML Training">
+                <ScrollViewer>
+                    <StackPanel Margin="10">
+                        <GroupBox Header="Training Sources" Margin="0,0,0,10">
+                            <StackPanel>
+                                <CheckBox x:Name="chkUseCommaAI" Content="Use comma.ai OpenDBC" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkUseBYD" Content="Use BYD OpenDBC" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkUseJejuSoul" Content="Use JejuSoul OBD PIDs" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkUseGENIVI" Content="Use GENIVI CANdevStudio" 
+                                          IsChecked="True" Margin="5"/>
+                                <CheckBox x:Name="chkUseBukapilot" Content="Use Bukapilot OpenDBC" 
+                                          IsChecked="True" Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Training Parameters">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="Training epochs:" VerticalAlignment="Center" Width="120"/>
+                                    <TextBox x:Name="txtTrainingEpochs" Text="100" Width="80"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Batch size:" VerticalAlignment="Center" Width="120"/>
+                                    <TextBox x:Name="txtBatchSize" Text="32" Width="80"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="5,10,5,0">
+                                    <TextBlock Text="Learning rate:" VerticalAlignment="Center" Width="120"/>
+                                    <TextBox x:Name="txtLearningRate" Text="0.001" Width="80"/>
+                                </StackPanel>
+                                
+                                <Button x:Name="btnTrainModel" Content="Train Model" 
+                                        Width="120" Height="30" Margin="5,20,5,5" 
+                                        Click="BtnTrainModel_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" 
+                    HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="OK" Width="80" Height="30" Margin="5" 
+                    Click="BtnOK_Click"/>
+            <Button Content="Cancel" Width="80" Height="30" Margin="5" 
+                    Click="BtnCancel_Click"/>
+            <Button Content="Apply" Width="80" Height="30" Margin="5" 
+                    Click="BtnApply_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

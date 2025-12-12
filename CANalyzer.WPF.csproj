@@ -1,0 +1,123 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    
+    <!-- Assembly Info -->
+    <AssemblyName>CANalyzer.WPF</AssemblyName>
+    <RootNamespace>CANalyzer.WPF</RootNamespace>
+    
+    <!-- Build Settings -->
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    
+    <!-- Assembly Version -->
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    
+    <!-- Package Info -->
+    <PackageId>CANalyzer</PackageId>
+    <Authors>12Volt Development Team</Authors>
+    <Company>12Volt</Company>
+    <Product>CANalyzer</Product>
+    <Description>Advanced CAN Bus Analysis and DBC Generation Tool</Description>
+    <Copyright>Copyright © 2024 12Volt</Copyright>
+    
+    <!-- Warning Level -->
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Core NuGet Packages -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    
+    <!-- WPF and UI Packages -->
+    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
+    
+    <!-- Data and Serialization -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    
+    <!-- Math and Statistics -->
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    
+    <!-- Utilities -->
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+    
+    <!-- File and Compression -->
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Project References -->
+    <ProjectReference Include="..\CANalyzer.Core\CANalyzer.Core.csproj" />
+    <ProjectReference Include="..\CANalyzer.ML\CANalyzer.ML.csproj" />
+    <ProjectReference Include="..\CANalyzer.Correlation\CANalyzer.Correlation.csproj" />
+    <ProjectReference Include="..\CANalyzer.ReverseEngineering\CANalyzer.ReverseEngineering.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Configuration Files -->
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- XAML Files -->
+    <Page Update="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    
+    <!-- Code-Behind Files -->
+    <Compile Update="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <!-- Create necessary directories -->
+    <Exec Command="if not exist &quot;$(TargetDir)Logs&quot; mkdir &quot;$(TargetDir)Logs&quot;" />
+    <Exec Command="if not exist &quot;$(TargetDir)Exports&quot; mkdir &quot;$(TargetDir)Exports&quot;" />
+    <Exec Command="if not exist &quot;$(TargetDir)DBC_Exports&quot; mkdir &quot;$(TargetDir)DBC_Exports&quot;" />
+    <Exec Command="if not exist &quot;$(TargetDir)Temp&quot; mkdir &quot;$(TargetDir)Temp&quot;" />
+    <Exec Command="if not exist &quot;$(TargetDir)Models&quot; mkdir &quot;$(TargetDir)Models&quot;" />
+  </Target>
+</Project>
