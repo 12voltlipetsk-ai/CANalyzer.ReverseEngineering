@@ -1,0 +1,569 @@
+Установка необходимого ПО
+# Проверка версии PowerShell (рекомендуется 7.0+)
+$PSVersionTable.PSVersion
+
+# Установка .NET 8.0 SDK
+winget install Microsoft.DotNet.SDK.8
+
+# Установка Visual Studio 2022 Community (рекомендуется) или
+# Visual Studio Code с расширениями:
+# - C# for Visual Studio Code
+# - .NET Extension Pack
+# - C# Dev Kit
+
+# Проверка установки .NET
+dotnet --list-sdks
+dotnet --list-runtimes
+
+# Установка необходимых компонентов для WPF
+# (входит в состав .NET SDK при установке через winget)
+
+Дополнительные инструменты
+powershell
+# Установка Git для Windows
+winget install Git.Git
+
+# Установка PowerShell модулей для разработки
+Install-Module -Name PSScriptAnalyzer -Force
+Install-Module -Name posh-git -Force
+
+Настройка окружения
+2.1 Клонирование и подготовка проекта
+
+# Переход в рабочую директорию
+cd "C:\Users\rveremeev\Documents\"
+
+# Создание папки проекта (если не существует)
+New-Item -ItemType Directory -Path "CANalyzer" -Force
+cd CANalyzer
+
+# Инициализация git репозитория
+git init
+
+# Проверка структуры проекта
+Get-ChildItem -Recurse -Depth 3 | Format-Table Name, Length, LastWriteTime
+
+2.2 Настройка переменных окружения
+powershell
+# Создание профиля PowerShell для проекта
+$profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+if (-not (Test-Path $profilePath)) {
+    New-Item -ItemType File -Path $profilePath -Force
+}
+
+# Добавление алиасов для проекта
+@'
+# CANalyzer Project Aliases
+function Build-Can { dotnet build CANalyzer.sln }
+function Run-Can { dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj }
+function Test-Can { dotnet test CANalyzer.sln }
+function Clean-Can { dotnet clean CANalyzer.sln }
+function Restore-Can { dotnet restore CANalyzer.sln }
+function Build-All {
+    dotnet restore
+    dotnet build CANalyzer.sln --configuration Release
+}
+'@ | Out-File -FilePath $profilePath -Append
+
+# Перезагрузка профиля
+. $profilePath
+
+3. Сборка проекта
+3.1 Основные команды сборки
+powershell
+
+# Восстановление зависимостей
+dotnet restore CANalyzer.sln
+
+# Сборка всего решения
+dotnet build CANalyzer.sln
+
+# Сборка в режиме Release
+dotnet build CANalyzer.sln --configuration Release
+
+# Очистка проекта
+dotnet clean CANalyzer.sln
+
+# Сборка конкретного проекта
+dotnet build CANalyzer.Core\CANalyzer.Core.csproj
+dotnet build CANalyzer.WPF\CANalyzer.WPF.csproj
+dotnet build CANalyzer.ReverseEngineering\CANalyzer.ReverseEngineering.csproj
+
+3.2 Использование скрипта сборки
+powershell
+# Запуск скрипта сборки (build_and_run.bat)
+.\build_and_run.bat
+
+# Альтернативный PowerShell скрипт сборки
+$buildScript = @'
+@echo off
+echo Building CANalyzer solution...
+echo.
+
+cd /d "C:\Users\rveremeev\Documents\CANalyzer"
+
+echo Cleaning previous builds...
+dotnet clean
+echo.
+
+echo Restoring packages...
+dotnet restore
+echo.
+
+echo Building all projects...
+dotnet build CANalyzer.sln
+if %ERRORLEVEL% NEQ 0 (
+    echo Build failed!
+    pause
+    exit /b 1
+)
+
+echo.
+echo Build successful! Starting application...
+timeout /t 2 /nobreak >nul
+
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj
+'@
+
+# Создание PowerShell скрипта сборки
+New-Item -Path ".\Build-Canalyzer.ps1" -Value $buildScript -Force
+
+4. Запуск приложения
+4.1 Запуск из PowerShell
+
+# Прямой запуск WPF приложения
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj
+
+# Запуск с аргументами
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj -- --log-level=Debug
+
+# Запуск в режиме отладки
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj --configuration Debug
+
+# Запуск консольного приложения (Scripts)
+dotnet run --project CANalyzer.Scripts\CANalyzer.Scripts.csproj
+
+4.2 Запуск с различными конфигурациями
+powershell
+
+# Создание конфигурационных файлов
+$devConfig = @'
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=.;Initial Catalog=CANalyzer;Integrated Security=True"
+  },
+  "AppSettings": {
+    "MaxLogFileSize": "10MB",
+    "AutoSaveInterval": "30"
+  }
+}
+'@
+
+New-Item -Path ".\CANalyzer.WPF\appsettings.Development.json" -Value $devConfig -Force
+
+5. Отладка
+5.1 Отладка в Visual Studio Code
+
+# Создание конфигураций отладки для VS Code
+$vscodeFolder = ".vscode"
+New-Item -ItemType Directory -Path $vscodeFolder -Force
+
+$launchJson = @'
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch WPF App",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/CANalyzer.WPF/bin/Debug/net8.0/CANalyzer.WPF.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/CANalyzer.WPF",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Launch Core Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/CANalyzer.Tests/CANalyzer.Tests.csproj"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole"
+    },
+    {
+      "name": "Launch ReverseEngineering",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/CANalyzer.ReverseEngineering/bin/Debug/net8.0/CANalyzer.ReverseEngineering.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/CANalyzer.ReverseEngineering",
+      "console": "internalConsole"
+    }
+  ]
+}
+'@
+
+New-Item -Path "$vscodeFolder\launch.json" -Value $launchJson -Force
+
+$tasksJson = @'
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/CANalyzer.sln",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "clean",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "clean",
+        "${workspaceFolder}/CANalyzer.sln"
+      ]
+    },
+    {
+      "label": "restore",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "restore",
+        "${workspaceFolder}/CANalyzer.sln"
+      ]
+    }
+  ]
+}
+'@
+
+New-Item -Path "$vscodeFolder\tasks.json" -Value $tasksJson -Force
+
+5.2 Отладка через консоль
+powershell
+
+# Включение подробного логирования
+$env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
+$env:DOTNET_NOLOGO = 1
+
+# Запуск с отладочной информацией
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj --verbosity detailed
+
+# Проверка зависимостей
+dotnet list CANalyzer.sln package
+
+# Анализ сборки
+dotnet build CANalyzer.sln /flp:v=diag
+
+5.3 Отладка с помощью диагностических инструментов
+powershell
+
+# Создание дампа памяти при ошибке
+$ErrorActionPreference = "Stop"
+try {
+    dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj
+} catch {
+    # Создание дампа для анализа
+    $process = Get-Process -Name "CANalyzer.WPF" -ErrorAction SilentlyContinue
+    if ($process) {
+        & "$env:ProgramFiles\dotnet\shared\Microsoft.NETCore.App\8.0.0\createdump" $process.Id
+    }
+}
+
+# Проверка производительности
+Measure-Command { dotnet build CANalyzer.sln }
+
+# Мониторинг использования памяти
+Get-Process dotnet | Where-Object {$_.CommandLine -like "*CANalyzer*"} | 
+    Select-Object Id, ProcessName, WorkingSet64, VirtualMemorySize64 | 
+    Format-Table -AutoSize
+
+    6. Тестирование
+6.1 Запуск тестов
+powershell
+
+# Запуск всех тестов
+dotnet test CANalyzer.sln
+
+# Запуск тестов с подробным выводом
+dotnet test CANalyzer.sln --verbosity detailed
+
+# Запуск тестов конкретного проекта
+dotnet test CANalyzer.Tests\CANalyzer.Tests.csproj
+
+# Запуск тестов с фильтром
+dotnet test CANalyzer.Tests\CANalyzer.Tests.csproj --filter "Category=Unit"
+
+# Создание отчета о покрытии кода
+dotnet test CANalyzer.sln --collect:"XPlat Code Coverage"
+
+# Запуск тестов в параллельном режиме
+dotnet test CANalyzer.sln --parallel
+
+6.2 Создание тестовых данных
+powershell
+
+# Генерация тестовых CAN логов
+$testData = @'
+[2024-01-01 10:00:00.000] 0x100 8 00 01 02 03 04 05 06 07
+[2024-01-01 10:00:00.010] 0x101 4 AA BB CC DD
+[2024-01-01 10:00:00.020] 0x102 8 11 22 33 44 55 66 77 88
+[2024-01-01 10:00:00.030] 0x100 8 08 09 0A 0B 0C 0D 0E 0F
+[2024-01-01 10:00:00.040] 0x103 1 99
+'@
+
+New-Item -Path ".\TestData\can_log.txt" -Value $testData -Force
+
+7. Мониторинг и диагностика
+7.1 Мониторинг приложения
+
+# Мониторинг запущенных процессов
+Get-Process | Where-Object {$_.ProcessName -like "*canalyzer*" -or $_.ProcessName -like "*dotnet*"} |
+    Select-Object Id, ProcessName, CPU, WorkingSet, StartTime |
+    Format-Table -AutoSize
+
+# Мониторинг файловой системы
+Get-ChildItem -Path ".\CANalyzer.WPF\bin\Debug\net8.0" -Recurse |
+    Sort-Object LastWriteTime -Descending |
+    Select-Object -First 10 Name, Length, LastWriteTime
+
+# Логирование событий приложения
+$logFile = ".\application.log"
+Start-Transcript -Path $logFile
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj
+Stop-Transcript
+
+7.2 Диагностика проблем
+powershell
+
+# Проверка зависимостей
+dotnet --info
+
+# Проверка установленных пакетов
+dotnet list package
+
+# Поиск конфликтов версий
+dotnet build CANalyzer.sln /t:ResolvePackageDependencies /p:RestoreUseStaticGraphEvaluation=true
+
+# Очистка кэша NuGet
+dotnet nuget locals all --clear
+
+# Проверка структуры проекта
+dotnet sln CANalyzer.sln list
+
+8. Автоматизация
+8.1 Создание скриптов автоматизации
+powershell
+
+# Создание скрипта полной сборки и запуска
+$autoScript = @'
+# Полная сборка и запуск CANalyzer
+Write-Host "=== CANalyzer Build and Run ===" -ForegroundColor Cyan
+
+# Шаг 1: Очистка
+Write-Host "Step 1: Cleaning..." -ForegroundColor Yellow
+dotnet clean CANalyzer.sln
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Clean failed!" -ForegroundColor Red
+    exit 1
+}
+
+# Шаг 2: Восстановление пакетов
+Write-Host "Step 2: Restoring packages..." -ForegroundColor Yellow
+dotnet restore CANalyzer.sln
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Restore failed!" -ForegroundColor Red
+    exit 1
+}
+
+# Шаг 3: Сборка
+Write-Host "Step 3: Building..." -ForegroundColor Yellow
+dotnet build CANalyzer.sln --configuration Debug --verbosity minimal
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Build failed!" -ForegroundColor Red
+    exit 1
+}
+
+# Шаг 4: Запуск тестов
+Write-Host "Step 4: Running tests..." -ForegroundColor Yellow
+dotnet test CANalyzer.Tests\CANalyzer.Tests.csproj --verbosity quiet
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Tests failed!" -ForegroundColor Red
+    exit 1
+}
+
+# Шаг 5: Запуск приложения
+Write-Host "Step 5: Starting application..." -ForegroundColor Green
+Write-Host "`nApplication output:" -ForegroundColor Cyan
+Write-Host "==================" -ForegroundColor Cyan
+dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj
+'@
+
+New-Item -Path ".\AutoBuild-Run.ps1" -Value $autoScript -Force
+
+# Создание скрипта для Reverse Engineering
+$reScript = @'
+# Reverse Engineering Pipeline
+param(
+    [string]$LogFile,
+    [string]$OutputDir = ".\Output"
+)
+
+Write-Host "=== CAN Reverse Engineering Pipeline ===" -ForegroundColor Cyan
+
+# Создание выходной директории
+New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
+
+# 1. Pre-processing
+Write-Host "1. Pre-processing..." -ForegroundColor Yellow
+dotnet run --project CANalyzer.Scripts\CANalyzer.Scripts.csproj -- `
+    --mode preprocess `
+    --input $LogFile `
+    --output "$OutputDir\preprocessed.json"
+
+# 2. Lexical Analysis
+Write-Host "2. Lexical Analysis..." -ForegroundColor Yellow
+dotnet run --project CANalyzer.Scripts\CANalyzer.Scripts.csproj -- `
+    --mode lexical `
+    --input "$OutputDir\preprocessed.json" `
+    --output "$OutputDir\signals.json"
+
+# 3. Semantic Analysis
+Write-Host "3. Semantic Analysis..." -ForegroundColor Yellow
+dotnet run --project CANalyzer.Scripts\CANalyzer.Scripts.csproj -- `
+    --mode semantic `
+    --input "$OutputDir\signals.json" `
+    --output "$OutputDir\clusters.json"
+
+Write-Host "`nPipeline completed!" -ForegroundColor Green
+Write-Host "Results saved to: $OutputDir" -ForegroundColor Cyan
+'@
+
+New-Item -Path ".\Run-ReverseEngineering.ps1" -Value $reScript -Force
+
+8.2 Планировщик задач для регулярных сборок
+powershell
+
+# Создание задачи для автоматической сборки
+$action = New-ScheduledTaskAction -Execute "PowerShell.exe" `
+    -Argument "-NoProfile -ExecutionPolicy Bypass -File `"C:\Users\rveremeev\Documents\CANalyzer\AutoBuild-Run.ps1`""
+
+$trigger = New-ScheduledTaskTrigger -Daily -At "8:00 AM"
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+
+Register-ScheduledTask -TaskName "CANalyzer Daily Build" `
+    -Action $action `
+    -Trigger $trigger `
+    -Settings $settings `
+    -Description "Daily build and test of CANalyzer project"
+
+    9. Отладка проблем
+
+9.1 Частые проблемы и решения
+
+# Проблема: Ошибки зависимостей
+# Решение:
+dotnet restore --force
+Remove-Item -Path ".\packages" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".\bin" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".\obj" -Recurse -Force -ErrorAction SilentlyContinue
+dotnet restore
+
+# Проблема: Конфликты версий .NET
+# Решение:
+dotnet --list-sdks
+# Установить нужную версию через winget
+winget install Microsoft.DotNet.SDK.8
+
+# Проблема: Недостаточно памяти
+# Решение:
+$env:DOTNET_GENERATE_ASPNET_CERTIFICATE = "false"
+$env:DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "true"
+dotnet build CANalyzer.sln /p:UseSharedCompilation=false
+
+9.2 Инструменты для глубокой отладки
+powershell
+# Профилирование производительности
+dotnet tool install -g dotnet-counters
+dotnet-counters monitor --process-id <PID> --counters System.Runtime
+
+# Анализ дампов памяти
+dotnet tool install -g dotnet-dump
+dotnet-dump collect --process-id <PID>
+
+# Профилирование ЦПУ
+dotnet tool install -g dotnet-trace
+dotnet-trace collect --process-id <PID>
+
+10. Полезные алиасы и функции
+powershell
+# Добавьте в профиль PowerShell
+function Show-ProjectStructure {
+    Get-ChildItem -Recurse -Depth 2 | 
+        Where-Object { $_.PSIsContainer } | 
+        Select-Object FullName | 
+        Format-Table -AutoSize
+}
+
+function Find-CanErrors {
+    Get-ChildItem -Recurse -Filter *.cs -ErrorAction SilentlyContinue | 
+        Select-String -Pattern "TODO|FIXME|BUG|HACK" | 
+        Select-Object Filename, LineNumber, Line | 
+        Format-Table -AutoSize
+}
+
+function Measure-BuildTime {
+    Measure-Command { dotnet build CANalyzer.sln }
+}
+
+function Get-ProjectStatus {
+    $projects = @(
+        "CANalyzer.Core",
+        "CANalyzer.WPF",
+        "CANalyzer.ML",
+        "CANalyzer.Correlation",
+        "CANalyzer.ReverseEngineering",
+        "CANalyzer.Tests",
+        "CANalyzer.Scripts"
+    )
+    
+    foreach ($project in $projects) {
+        $projPath = ".\$project\$project.csproj"
+        if (Test-Path $projPath) {
+            Write-Host "$project: " -NoNewline
+            Write-Host "OK" -ForegroundColor Green
+        } else {
+            Write-Host "$project: " -NoNewline
+            Write-Host "MISSING" -ForegroundColor Red
+        }
+    }
+}
+
+function Start-CanDebugSession {
+    # Запуск отладочной сессии
+    $env:DOTNET_ENVIRONMENT = "Development"
+    $env:ASPNETCORE_ENVIRONMENT = "Development"
+    
+    Write-Host "Starting debug session..." -ForegroundColor Cyan
+    dotnet run --project CANalyzer.WPF\CANalyzer.WPF.csproj
+}
+

@@ -1,0 +1,307 @@
+
+CANalyzer проект под Windows
+https://github.com/12voltlipetsk-ai/12Volt/tree/main/CANalyzer
+cd "C:\Users\rveremeev\Documents\CANalyzer"
+dotnet clean
+dotnet build .\CANalyzer.WPF\CANalyzer.WPF.csproj
+dotnet run --project .\CANalyzer.WPF\
+Приложение позволяет загружать CAN логи в форматах CSV/ASC, 
+анализировать их 
+и автоматически генерировать DBC файлы с обнаруженными сигналами.
+C:\Users\rveremeev\Documents\CANalyzer\
+├── Directory.Build.props
+├── build_and_run.bat
+├── CANalyzer.sln ✓
+├── CANalyzer.Core\ ✓
+│   ├── CANalyzer.Core.csproj
+│   ├── Models\ ✓
+│   │   ├── CANMessage.cs 
+│   │   ├── CANSignal.cs 
+│   │   ├── MessageStatistics.cs 
+│   │   └── Enums.cs 
+│   ├── Analyzers\ ✓
+│   │   ├── StatisticalAnalyzer.cs 
+│   │   └── SignalDetector.cs 
+│   ├── Parsers\ ✓
+│   │   └── LogParser.cs 
+│   └── DBC\ ✓
+│       └── DBCGenerator.cs 
+├── CANalyzer.WPF\ ✓
+│   ├── CANalyzer.WPF.csproj 
+│   ├── App.xaml 
+│   ├── App.xaml.cs 
+│   ├── appsettings.json 
+│   ├── build_and_run.bat 
+│   └── Views\ ✓
+│       ├── MainWindow.xaml 
+│       ├── MainWindow.xaml.cs 
+│       ├── SettingsWindow.xaml  
+│       └── SettingsWindow.xaml.cs  
+├── CANalyzer.ML\ ✓
+│   ├── CANalyzer.ML.csproj 
+│   └── NeuralNetworks\ ✓
+│       └── SignalClassifier.cs 
+├── CANalyzer.Correlation\
+│   ├── CANalyzer.Correlation.csproj 
+│   └── Analyzers\ ✓
+│       └── CorrelationAnalyzer.cs ✓ 
+├── CANalyzer.Tests\ ✓
+│   ├── CANalyzer.Tests.csproj 
+│   └── SignalDetectorTests.cs 
+└── CANalyzer.Scripts\ ✓
+    ├── CANalyzer.Scripts.csproj 
+    └── Program.cs 
+
+PS C:\Users\rveremeev\Documents\CANalyzer> # Создаем базовую структуру
+>> $basePath = "C:\Users\rveremeev\Documents\CANalyzer"
+>> New-Item -ItemType Directory -Path $basePath -Force
+>>
+>> # Основные проекты
+>> @(
+>>     "CANalyzer.Core",
+>>     "CANalyzer.WPF",
+>>     "CANalyzer.ML",
+>>     "CANalyzer.Correlation",
+>>     "CANalyzer.Tests",
+>>     "CANalyzer.Scripts"
+>> ) | ForEach-Object { New-Item -ItemType Directory -Path "$basePath\$_" -Force }
+>>
+>> # Создаем файл решения
+>> New-Item -ItemType File -Path "$basePath\CANalyzer.sln" -Force
+>>
+>> # CANalyzer.Core структура
+>> @(
+>>     "CANalyzer.Core\Models",
+>>     "CANalyzer.Core\Analyzers",
+>>     "CANalyzer.Core\Parsers",
+>>     "CANalyzer.Core\DBC"
+>> ) | ForEach-Object { New-Item -ItemType Directory -Path "$basePath\$_" -Force }
+>>
+>> # CANalyzer.Core файлы
+>> @(
+>>     "CANalyzer.Core\CANalyzer.Core.csproj",
+>>     "CANalyzer.Core\Models\CANMessage.cs",
+>>     "CANalyzer.Core\Models\CANSignal.cs",
+>>     "CANalyzer.Core\Models\MessageStatistics.cs",
+>>     "CANalyzer.Core\Models\Enums.cs",
+>>     "CANalyzer.Core\Analyzers\StatisticalAnalyzer.cs",
+>>     "CANalyzer.Core\Analyzers\SignalDetector.cs",
+>>     "CANalyzer.Core\Parsers\LogParser.cs",
+>>     "CANalyzer.Core\DBC\DBCGenerator.cs"
+>> ) | ForEach-Object { New-Item -ItemType File -Path "$basePath\$_" -Force }
+>>
+>> # CANalyzer.WPF структура
+>> New-Item -ItemType Directory -Path "$basePath\CANalyzer.WPF\Views" -Force
+>>
+>> # CANalyzer.WPF файлы
+>> @(
+>>     "CANalyzer.WPF\CANalyzer.WPF.csproj",
+>>     "CANalyzer.WPF\App.xaml",
+>>     "CANalyzer.WPF\App.xaml.cs",
+>>     "CANalyzer.WPF\appsettings.json",
+>>     "CANalyzer.WPF\Views\MainWindow.xaml",
+>>     "CANalyzer.WPF\Views\MainWindow.xaml.cs"
+>> ) | ForEach-Object { New-Item -ItemType File -Path "$basePath\$_" -Force }
+>>
+>> # CANalyzer.ML структура
+>> New-Item -ItemType Directory -Path "$basePath\CANalyzer.ML\NeuralNetworks" -Force
+>>
+>> @(
+>>     "CANalyzer.ML\CANalyzer.ML.csproj",
+>>     "CANalyzer.ML\NeuralNetworks\SignalClassifier.cs"
+>> ) | ForEach-Object { New-Item -ItemType File -Path "$basePath\$_" -Force }
+>>
+>> # CANalyzer.Correlation структура
+>> New-Item -ItemType Directory -Path "$basePath\CANalyzer.Correlation\Analyzers" -Force
+>>
+>> @(
+>>     "CANalyzer.Correlation\CANalyzer.Correlation.csproj",
+>>     "CANalyzer.Correlation\Analyzers\CorrelationAnalyzer.cs"
+>> ) | ForEach-Object { New-Item -ItemType File -Path "$basePath\$_" -Force }
+>>
+>> # CANalyzer.Tests файлы
+>> @(
+>>     "CANalyzer.Tests\CANalyzer.Tests.csproj",
+>>     "CANalyzer.Tests\SignalDetectorTests.cs"
+>> ) | ForEach-Object { New-Item -ItemType File -Path "$basePath\$_" -Force }
+>>
+>> # CANalyzer.Scripts файлы
+>> @(
+>>     "CANalyzer.Scripts\CANalyzer.Scripts.csproj",
+>>     "CANalyzer.Scripts\Program.cs"
+>> ) | ForEach-Object { New-Item -ItemType File -Path "$basePath\$_" -Force }
+>>
+>> Write-Host "Структура создана успешно!" -ForegroundColor Green
+
+
+    Каталог: C:\Users\rveremeev\Documents
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.12.2025     20:04                CANalyzer
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.12.2025     20:04                CANalyzer.Core
+d-----        07.12.2025     20:04                CANalyzer.WPF
+d-----        07.12.2025     20:04                CANalyzer.ML
+d-----        07.12.2025     20:04                CANalyzer.Correlation
+d-----        07.12.2025     20:04                CANalyzer.Tests
+d-----        07.12.2025     20:04                CANalyzer.Scripts
+-a----        07.12.2025     20:05              0 CANalyzer.sln
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Core
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.12.2025     20:04                Models
+d-----        07.12.2025     20:04                Analyzers
+d-----        07.12.2025     20:04                Parsers
+d-----        07.12.2025     20:04                DBC
+-a----        07.12.2025     20:05              0 CANalyzer.Core.csproj
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Core\Models
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 CANMessage.cs
+-a----        07.12.2025     20:05              0 CANSignal.cs
+-a----        07.12.2025     20:05              0 MessageStatistics.cs
+-a----        07.12.2025     20:05              0 Enums.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Core\Analyzers
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 StatisticalAnalyzer.cs
+-a----        07.12.2025     20:05              0 SignalDetector.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Core\Parsers
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 LogParser.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Core\DBC
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 DBCGenerator.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.WPF
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.12.2025     20:04                Views
+-a----        07.12.2025     20:05              0 CANalyzer.WPF.csproj
+-a----        07.12.2025     20:05              0 App.xaml
+-a----        07.12.2025     20:05              0 App.xaml.cs
+-a----        07.12.2025     20:05              0 appsettings.json
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.WPF\Views
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 MainWindow.xaml
+-a----        07.12.2025     20:05              0 MainWindow.xaml.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.ML
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.12.2025     20:04                NeuralNetworks
+-a----        07.12.2025     20:05              0 CANalyzer.ML.csproj
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.ML\NeuralNetworks
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 SignalClassifier.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Correlation
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.12.2025     20:04                Analyzers
+-a----        07.12.2025     20:05              0 CANalyzer.Correlation.csproj
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Correlation\Analyzers
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 CorrelationAnalyzer.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Tests
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 CANalyzer.Tests.csproj
+-a----        07.12.2025     20:05              0 SignalDetectorTests.cs
+
+
+    Каталог: C:\Users\rveremeev\Documents\CANalyzer\CANalyzer.Scripts
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.12.2025     20:05              0 CANalyzer.Scripts.csproj
+-a----        07.12.2025     20:05              0 Program.cs
+Структура создана успешно!
+
+
+PS C:\Users\rveremeev\Documents\CANalyzer>
+
+Порядок интеграции компонентов в MainWindow:
+Загрузка лога → LogParser.Parse()
+
+Анализ статистики → StatisticalAnalyzer.CalculateStatistics()
+
+Детекция сигналов → SignalDetector.DetectSignals()
+
+ML классификация → SignalClassifier.ClassifySignal()
+
+Корреляционный анализ → CorrelationAnalyzer.AnalyzeCorrelations()
+
+Генерация DBC → DBCGenerator.GenerateDBCFile()
+
+Отображение в 3 окнах (сырые данные, декодированные сигналы, корреляции)
+Стоит обратить внимание, что в текущем описании упоминаются 6 проектов!
+ неупрощай код! Создай полное рабочее приложение
+Используй для обучения модели следующие ресурсы
+https://github.com/commaai/opendbc/tree/master/opendbc/dbc
+https://github.com/BYDcar/opendbc-byd/tree/master
+https://github.com/JejuSoul/OBD-PIDs-for-HKMC-EVs/
+https://github.com/GENIVI/CANdevStudio?tab=readme-ov-file#can-signals
+https://github.com/kommuai/bukapilot/tree/snapshot/opendbc
+
+
+
