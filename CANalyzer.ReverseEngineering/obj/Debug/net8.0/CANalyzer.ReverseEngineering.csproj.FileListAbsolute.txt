@@ -1,0 +1,5 @@
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.ReverseEngineering\bin\net8.0\CANalyzer.ReverseEngineering.deps.json
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.ReverseEngineering\bin\net8.0\CANalyzer.ReverseEngineering.dll
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.ReverseEngineering\bin\net8.0\CANalyzer.ReverseEngineering.pdb
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.ReverseEngineering\bin\net8.0\CANalyzer.Core.dll
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.ReverseEngineering\bin\net8.0\CANalyzer.Core.pdb
