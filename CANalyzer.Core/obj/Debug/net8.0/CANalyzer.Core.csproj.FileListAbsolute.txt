@@ -1,0 +1,16 @@
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\bin\net8.0\CANalyzer.Core.deps.json
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\bin\net8.0\CANalyzer.Core.dll
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\bin\net8.0\CANalyzer.Core.pdb
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\bin\Debug\net8.0\CANalyzer.Core.deps.json
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\bin\Debug\net8.0\CANalyzer.Core.dll
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\bin\Debug\net8.0\CANalyzer.Core.pdb
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.csproj.AssemblyReference.cache
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.AssemblyInfoInputs.cache
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.AssemblyInfo.cs
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.csproj.CoreCompileInputs.cache
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.sourcelink.json
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.dll
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\refint\CANalyzer.Core.dll
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\CANalyzer.Core.pdb
+C:\Users\rveremeev\Documents\CANalyzer ASC_OK_Analyze_OK_Generate_BIT_ok_DBC_OK ML_OFF\CANalyzer.Core\obj\Debug\net8.0\ref\CANalyzer.Core.dll
