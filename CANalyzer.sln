@@ -13,8 +13,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CANalyzer.Tests", "CANalyzer.Tests\CANalyzer.Tests.csproj", "{B780FA5B-0F05-4C87-8943-7CFAEC41492C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CANalyzer.Scripts", "CANalyzer.Scripts\CANalyzer.Scripts.csproj", "{D0C283AB-FDFB-4165-80CE-049414FF1772}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CANalyzer.ReverseEngineering", "CANalyzer.ReverseEngineering\CANalyzer.ReverseEngineering.csproj", "{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CANalyzer.ReverseEngineering", "CANalyzer.ReverseEngineering\CANalyzer.ReverseEngineering.csproj", "{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,19 +73,18 @@ Global
 		{D0C283AB-FDFB-4165-80CE-049414FF1772}.Release|x86.ActiveCfg = Release|x86
 		{D0C283AB-FDFB-4165-80CE-049414FF1772}.Release|x86.Build.0 = Release|x86
 		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|x86.ActiveCfg = Debug|x86
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|x86.Build.0 = Debug|x86
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|Any CPU.Build.0 = Release|Any CPU
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|x86.ActiveCfg = Release|x86
-        {E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|x86.Build.0 = Release|x86
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|x86.ActiveCfg = Debug|x86
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Debug|x86.Build.0 = Debug|x86
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|x86.ActiveCfg = Release|x86
+		{E8F9A1B2-C3D4-4E5F-9A6B-7C8D9E0F1A2B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		        SolutionGuid = {B8A4F8C3A-1D2B-4E7F-9A6D-5B3C8E7F1A2B}
 		SolutionGuid = {1BF2469F-D3E8-471F-99B3-800F17F1EA51}
 	EndGlobalSection
 EndGlobal
